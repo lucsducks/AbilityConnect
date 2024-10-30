@@ -12,7 +12,6 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (_) => MenuAppController()),
         ChangeNotifierProvider(create: (_) => VisualModeProvider()),
-        // otros proveedores
       ],
       child: MyApp(),
     ),
@@ -144,7 +143,15 @@ class MyApp extends StatelessWidget {
                 path: 'document',
                 pageBuilder: (context, state) {
                   return NoTransitionPage(
-                    child: AppScaffold(child: DocumentWritingScreen()),
+                    child: DocumentWritingScreen(),
+                  );
+                },
+              ),
+              GoRoute(
+                path: 'job-board',
+                pageBuilder: (context, state) {
+                  return NoTransitionPage(
+                    child: JobBoardScreen(),
                   );
                 },
               ),

@@ -6,3 +6,5 @@ export 'common/VisualModeProvider.dart';
 export 'dashboard/dashboard_screen.dart';
 export 'main/components/side_menu.dart';
 export 'main/main_screen.dart';
+export 'dashboard/document_writing_screen.dart';
+export 'dashboard/job_board_screen.dart';

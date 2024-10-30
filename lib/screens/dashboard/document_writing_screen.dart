@@ -1,3 +1,7 @@
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
 class DocumentWritingScreen extends StatefulWidget {
@@ -11,6 +15,8 @@ class _DocumentWritingScreenState extends State<DocumentWritingScreen> {
   String documentType = "resume";
   String jobType = "";
   String userInput = "";
+  bool isFileSelected = false;
+  String fileName = "";
   String aiSuggestions =
       "Las sugerencias aparecerán aquí después de enviar tu documento.";
 
@@ -19,6 +25,30 @@ class _DocumentWritingScreenState extends State<DocumentWritingScreen> {
       aiSuggestions =
           "Aquí aparecerán las sugerencias de la IA para mejorar tu documento.";
     });
+  }
+
+  Future<void> pickFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    if (result != null) {
+      setState(() {
+        fileName = result.files.single.name;
+      });
+
+      if (result.files.single.bytes != null) {
+        Uint8List fileBytes = result.files.single.bytes!;
+        String content = String.fromCharCodes(fileBytes);
+        setState(() {
+          userInput = content;
+          isFileSelected = true;
+        });
+      } else if (result.files.single.path != null) {
+        String content = await File(result.files.single.path!).readAsString();
+        setState(() {
+          userInput = content;
+          isFileSelected = true;
+        });
+      }
+    }
   }
 
   void handleDownload() {
@@ -49,23 +79,11 @@ class _DocumentWritingScreenState extends State<DocumentWritingScreen> {
                           children: [
                             Row(
                               children: [
-                                CircleAvatar(
-                                  radius: 25,
-                                  backgroundColor: Colors.grey[300],
-                                  child: const Text(
-                                    'JJ',
-                                    style: TextStyle(
-                                      color: Colors.black87,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(width: 12),
                                 RichText(
                                   text: TextSpan(
                                     children: [
                                       TextSpan(
-                                        text: 'Hola, ',
+                                        text: 'Vamor a mejorar tu ',
                                         style: TextStyle(
                                           color: colors.colorScheme.secondary,
                                           fontSize: 35,
@@ -73,7 +91,7 @@ class _DocumentWritingScreenState extends State<DocumentWritingScreen> {
                                         ),
                                       ),
                                       TextSpan(
-                                        text: 'jhonatan',
+                                        text: 'Curriculum o carta de presentación',
                                         style: TextStyle(
                                           color: colors.colorScheme.primary,
                                           fontSize: 35,
@@ -88,77 +106,7 @@ class _DocumentWritingScreenState extends State<DocumentWritingScreen> {
                             const SizedBox(height: 10),
                           ],
                         ),
-                        Row(
-                          children: [
-                            Container(
-                              width: 300,
-                              height: 45,
-                              decoration: BoxDecoration(
-                                color: Colors.grey[900],
-                                borderRadius: BorderRadius.circular(25),
-                              ),
-                              child: Row(
-                                children: [
-                                  Container(
-                                    margin: const EdgeInsets.all(5),
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 15),
-                                    decoration: BoxDecoration(
-                                      color: colors.primaryColor,
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    child: const Center(
-                                      child: Text(
-                                        'Buscar',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(width: 16),
-                            Container(
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                color: Colors.grey[900],
-                                shape: BoxShape.circle,
-                              ),
-                              child: Stack(
-                                children: [
-                                  IconButton(
-                                    onPressed: () {},
-                                    icon: const Icon(
-                                        Icons.notifications_outlined,
-                                        color: Colors.white70,
-                                        size: 28),
-                                  ),
-                                  Positioned(
-                                    right: 0,
-                                    top: 0,
-                                    child: Container(
-                                      padding: const EdgeInsets.all(4),
-                                      decoration: const BoxDecoration(
-                                        color: Colors.red,
-                                        shape: BoxShape.circle,
-                                      ),
-                                      child: const Text(
-                                        '1',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 10,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
+                       
                       ],
                     ),
                     const SizedBox(height: 300),
@@ -166,10 +114,39 @@ class _DocumentWritingScreenState extends State<DocumentWritingScreen> {
                 ),
               ),
               const SizedBox(height: 150),
+              const SizedBox(height: 16),
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const Text(
+                        "Sugerencias de la IA",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        aiSuggestions,
+                        style: const TextStyle(fontSize: 14),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              Center(
+                child: ElevatedButton.icon(
+                  onPressed: handleDownload,
+                  icon: const Icon(Icons.download),
+                  label: const Text("Descargar Documento"),
+                ),
+              ),
+              const SizedBox(height: 50),
             ],
           ),
           Positioned(
-            top: 150,
+            top: 100,
             left: MediaQuery.of(context).size.width * 0.2,
             right: MediaQuery.of(context).size.width * 0.2,
             child: Card(
@@ -184,6 +161,46 @@ class _DocumentWritingScreenState extends State<DocumentWritingScreen> {
                       style: TextStyle(fontSize: 16),
                     ),
                     const SizedBox(height: 16),
+                    !isFileSelected
+                        ? Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              ElevatedButton(
+                                onPressed: pickFile,
+                                child: const Text("Subir archivo"),
+                              ),
+                            ],
+                          )
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(4.0),
+                                child: Text(
+                                  fileName,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: colors.primaryColor,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      isFileSelected = false;
+                                      fileName = '';
+                                    });
+                                  },
+                                  icon: Icon(Icons.close))
+                            ],
+                          ),
+                    SizedBox(
+                      height: 5,
+                    ),
                     Row(
                       children: [
                         Expanded(

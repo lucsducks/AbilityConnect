@@ -99,13 +99,14 @@ class _SideMenuState extends State<SideMenu> {
                       },
                     ),
                     DrawerListTile(
-                      title: "Task",
+                      title: "Bolsa de trabajo",
                       svgSrc: "assets/icons/menu_task.svg",
                       isExpanded: isExpanded,
-                      isEnabled: selectedMenuItem == 'Task',
+                      isEnabled: selectedMenuItem == 'jobboard',
                       press: () {
                         setState(() {
-                          selectedMenuItem = 'Task';
+                          selectedMenuItem = 'jobboard';
+                          context.go('/home/job-board');
                         });
                       },
                     ),

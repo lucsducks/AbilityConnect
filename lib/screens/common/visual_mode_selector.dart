@@ -1,4 +1,4 @@
-import 'package:abilityconnect/screens/screens.dart';
+import 'package:abilityconnect/screens/common/VisualModeProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -68,7 +68,7 @@ class _VisualModeSelectorState extends State<VisualModeSelector> {
     final visualMode = visualModeProvider.mode;
     final colors = Theme.of(context);
     return Container(
-      margin: EdgeInsets.only(right: 5),
+      margin: const EdgeInsets.only(right: 5),
       child: Align(
         alignment: Alignment.centerRight,
         child: Transform.translate(
@@ -114,6 +114,7 @@ class _VisualModeSelectorState extends State<VisualModeSelector> {
                                 : Colors.grey),
                         onPressed: () => visualModeProvider
                             .setVisualMode(VisualMode.highContrast),
+
                       ),
                     ],
                   ),
