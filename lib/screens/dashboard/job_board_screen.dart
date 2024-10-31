@@ -11,6 +11,8 @@ class _JobBoardScreenState extends State<JobBoardScreen> {
   double distance = 50;
   bool isRemote = false;
   String selectedOption = 'Remoto';
+
+  bool isShow = false;
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context);
@@ -39,7 +41,7 @@ class _JobBoardScreenState extends State<JobBoardScreen> {
                                   text: TextSpan(
                                     children: [
                                       TextSpan(
-                                        text: 'encontraras aqui',
+                                        text: 'encontraras aqui ',
                                         style: TextStyle(
                                           color: colors.colorScheme.secondary,
                                           fontSize: 35,
@@ -69,61 +71,68 @@ class _JobBoardScreenState extends State<JobBoardScreen> {
                 ),
               ),
               const SizedBox(height: 100),
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(8),
-                      boxShadow: [
-                        BoxShadow(color: Colors.black12, blurRadius: 8),
-                      ]),
-                  child: Column(
-                    children: List.generate(
-                      3,
-                      (index) => ListTile(
-                        contentPadding: const EdgeInsets.all(16),
-                        title: const Text('Desarrollador Full Stack',
-                            style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold)),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: const [
-                                Icon(Icons.work_outline,
-                                    size: 18, color: Colors.grey),
-                                SizedBox(width: 4),
-                                Text('Tiempo completo'),
-                              ],
+              isShow
+                  ? Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(8),
+                            boxShadow: [
+                              BoxShadow(color: Colors.black12, blurRadius: 8),
+                            ]),
+                        child: Column(
+                          children: List.generate(
+                            3,
+                            (index) => ListTile(
+                              contentPadding: const EdgeInsets.all(16),
+                              title: const Text('Desarrollador Full Stack',
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold)),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: const [
+                                      Icon(Icons.work_outline,
+                                          size: 18, color: Colors.grey),
+                                      SizedBox(width: 4),
+                                      Text('Tiempo completo'),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: const [
+                                      Icon(Icons.location_on_outlined,
+                                          size: 18, color: Colors.grey),
+                                      SizedBox(width: 4),
+                                      Text('Lima, Perú'),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: const [
+                                      Icon(Icons.trending_up_outlined,
+                                          size: 18, color: Colors.grey),
+                                      SizedBox(width: 4),
+                                      Text('Publicado hace 3 días'),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              trailing: TextButton(
+                                onPressed: () {},
+                                child: const Text('Ver Detalles'),
+                              ),
                             ),
-                            Row(
-                              children: const [
-                                Icon(Icons.location_on_outlined,
-                                    size: 18, color: Colors.grey),
-                                SizedBox(width: 4),
-                                Text('Lima, Perú'),
-                              ],
-                            ),
-                            Row(
-                              children: const [
-                                Icon(Icons.trending_up_outlined,
-                                    size: 18, color: Colors.grey),
-                                SizedBox(width: 4),
-                                Text('Publicado hace 3 días'),
-                              ],
-                            ),
-                          ],
-                        ),
-                        trailing: TextButton(
-                          onPressed: () {},
-                          child: const Text('Ver Detalles'),
+                          ),
                         ),
                       ),
+                    )
+                  : Container(
+                      child: Center(
+                        child: Text('No hay resultados'),
+                      ),
                     ),
-                  ),
-                ),
-              ),
               const SizedBox(height: 50),
             ],
           ),
@@ -132,14 +141,8 @@ class _JobBoardScreenState extends State<JobBoardScreen> {
             left: MediaQuery.of(context).size.width * 0.2,
             right: MediaQuery.of(context).size.width * 0.2,
             child: Card(
-              child: Container(
+              child: Padding(
                 padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(8),
-                    boxShadow: [
-                      BoxShadow(color: Colors.black12, blurRadius: 8),
-                    ]),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -187,14 +190,6 @@ class _JobBoardScreenState extends State<JobBoardScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Switch(
-                          value: isRemote,
-                          onChanged: (value) {
-                            setState(() {
-                              isRemote = value;
-                            });
-                          },
-                        ),
                         SegmentedButton<String>(
                           segments: const <ButtonSegment<String>>[
                             ButtonSegment<String>(
@@ -215,7 +210,11 @@ class _JobBoardScreenState extends State<JobBoardScreen> {
                     ),
                     const SizedBox(height: 20),
                     ElevatedButton.icon(
-                      onPressed: () {},
+                      onPressed: () {
+                        setState(() {
+                          isShow = true;
+                        });
+                      },
                       icon: Icon(Icons.filter_alt_outlined),
                       label: const Text('Aplicar Filtros'),
                     ),

@@ -1,6 +1,6 @@
 import 'package:abilityconnect/constants.dart';
 import 'package:abilityconnect/controllers/menu_app_controller.dart';
-import 'package:abilityconnect/screens/dashboard/document_writing_screen.dart';
+import 'package:abilityconnect/screens/common/pomodoro_timer_screen.dart';
 import 'package:abilityconnect/screens/screens.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -155,6 +155,14 @@ class MyApp extends StatelessWidget {
                   );
                 },
               ),
+              GoRoute(
+                path: 'module',
+                pageBuilder: (context, state) {
+                  return NoTransitionPage(
+                    child: ModuleScreen(),
+                  );
+                },
+              ),
             ],
           ),
         ],
@@ -174,8 +182,36 @@ class AppScaffold extends StatelessWidget {
         children: [
           child,
           VisualModeSelector(),
+          PomodoroTimerButton(),
         ],
       ),
+    );
+  }
+}
+
+class PomodoroTimerButton extends StatelessWidget {
+  const PomodoroTimerButton({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton(
+      onPressed: () {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return Dialog(
+              child: Container(
+                width: 300,
+                height: 400,
+                padding: EdgeInsets.all(16),
+                child: PomodoroTimer(),
+              ),
+            );
+          },
+        );
+      },
+      child: Icon(Icons.timer),
+      tooltip: 'Temporizador Pomodoro',
     );
   }
 }

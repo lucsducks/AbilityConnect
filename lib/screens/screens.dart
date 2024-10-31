@@ -8,3 +8,4 @@ export 'main/components/side_menu.dart';
 export 'main/main_screen.dart';
 export 'dashboard/document_writing_screen.dart';
 export 'dashboard/job_board_screen.dart';
+export 'dashboard/module_screen.dart';

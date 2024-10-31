@@ -111,13 +111,14 @@ class _SideMenuState extends State<SideMenu> {
                       },
                     ),
                     DrawerListTile(
-                      title: "Store",
+                      title: "Módulos de Capacitación",
                       svgSrc: "assets/icons/menu_store.svg",
                       isExpanded: isExpanded,
-                      isEnabled: selectedMenuItem == 'Store',
+                      isEnabled: selectedMenuItem == 'module',
                       press: () {
                         setState(() {
-                          selectedMenuItem = 'Store';
+                          selectedMenuItem = 'module';
+                          context.go('/home/module');
                         });
                       },
                     ),
